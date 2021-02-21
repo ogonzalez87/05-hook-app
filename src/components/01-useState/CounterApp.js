@@ -8,7 +8,7 @@ export const CounterApp = () => {
     counter3: 30,
     counter4: 40,
   });
-  const {counter1, counter2} = state;
+  const { counter1, counter2 } = state;
 
   // console.log(counter);
   return (
@@ -21,7 +21,7 @@ export const CounterApp = () => {
       <button
         className="btn btn-primary"
         onClick={() => {
-          setState({...state , counter1: counter1 + 1 });
+          setState({ ...state, counter1: counter1 + 1 });
         }}
       >
         {" "}
