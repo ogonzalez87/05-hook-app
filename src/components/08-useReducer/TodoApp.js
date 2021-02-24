@@ -3,26 +3,69 @@ import { todoReducer } from "./todoReducer";
 import "./styles.css";
 
 const initialState = [
-    {
-        id: new Date().getTime(),
-        desc: "Aprender React",
-        done: false,
-    },
+  {
+    id: new Date().getTime(),
+    desc: "Aprender React",
+    done: false,
+  },
 ];
 export const TodoApp = () => {
+  const [todos, dispatch] = useReducer(todoReducer, initialState);
+  console.log(todos);
 
-  const [todos] = useReducer(todoReducer,initialState);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newTodo = {
+      id: new Date().getTime(),
+      desc: "Nueva Tarea",
+      done: false,
+    };
+    const action = {
+      type: "add",
+      payload: newTodo,
+    };
+
+    dispatch(action);
+  };
 
   return (
     <div>
-      <h1>TodoApp</h1>
+      <h1>TodoApp ({todos.length})</h1>
       <hr />
-
-      <ul>
-        <li> Item 1</li>
-        <li> Item 2</li>
-        <li> Item 3</li>
-      </ul>
+      <div class="row">
+        <div className="col-7">
+          <ul className="list-group list-group-flush">
+            {todos.map((todo, i) => (
+              <li key={todo.id} className="list-group-item">
+                <p className="text-center ">
+                  {i + 1}. {todo.desc}
+                </p>
+                <button className="btn btn-danger">Borrar</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="col-5">
+          <h4>Agregar ToDo</h4>
+          <hr />
+          <form onSubmit={handleSubmit}>
+            <input
+              className="form-control"
+              type="text"
+              name="description"
+              placeholder="Aprender..."
+              autoComplete="off"
+            />
+            <button
+              className="btn btn-outline-primary mt-1 form-control"
+              type="submit"
+            >
+              Agregar
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
