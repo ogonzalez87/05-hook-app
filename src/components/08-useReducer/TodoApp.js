@@ -1,24 +1,39 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { todoReducer } from "./todoReducer";
-import "./styles.css";
+import { useForm } from "../../hooks/useForm";
 
-const initialState = [
-  {
-    id: new Date().getTime(),
-    desc: "Aprender React",
-    done: false,
-  },
-];
+const init = () => {
+  return JSON.parse(localStorage.getItem("todos")) || [];
+
+  // return [
+  //   {
+  //     id: new Date().getTime(),
+  //     desc: "Aprender React",
+  //     done: false,
+  //   },
+  // ];
+};
+
 export const TodoApp = () => {
-  const [todos, dispatch] = useReducer(todoReducer, initialState);
-  console.log(todos);
+  const [todos, dispatch] = useReducer(todoReducer, [], init);
+
+  const [{ description }, handleInputChange, reset] = useForm({
+    description: "",
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (description.trim().length <= 1) {
+      return;
+    }
 
     const newTodo = {
       id: new Date().getTime(),
-      desc: "Nueva Tarea",
+      desc: description,
       done: false,
     };
     const action = {
@@ -27,13 +42,14 @@ export const TodoApp = () => {
     };
 
     dispatch(action);
+    reset();
   };
 
   return (
     <div>
       <h1>TodoApp ({todos.length})</h1>
       <hr />
-      <div class="row">
+      <div className="row">
         <div className="col-7">
           <ul className="list-group list-group-flush">
             {todos.map((todo, i) => (
@@ -56,6 +72,8 @@ export const TodoApp = () => {
               name="description"
               placeholder="Aprender..."
               autoComplete="off"
+              onChange={handleInputChange}
+              value={description}
             />
             <button
               className="btn btn-outline-primary mt-1 form-control"
