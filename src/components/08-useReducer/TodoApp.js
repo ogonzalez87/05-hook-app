@@ -1,28 +1,16 @@
 import React, { useEffect, useReducer } from "react";
 import { todoReducer } from "./todoReducer";
-import { useForm } from "../../hooks/useForm";
 
 import "./styles.css";
 import { TodoList } from "./TodoList";
+import { TodoAdd } from "./TodoAdd";
 
 const init = () => {
   return JSON.parse(localStorage.getItem("todos")) || [];
-
-  // return [
-  //   {
-  //     id: new Date().getTime(),
-  //     desc: "Aprender React",
-  //     done: false,
-  //   },
-  // ];
 };
 
 export const TodoApp = () => {
   const [todos, dispatch] = useReducer(todoReducer, [], init);
-
-  const [{ description }, handleInputChange, reset] = useForm({
-    description: "",
-  });
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -36,24 +24,11 @@ export const TodoApp = () => {
     dispatch(action);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (description.trim().length <= 1) {
-      return;
-    }
-
-    const newTodo = {
-      id: new Date().getTime(),
-      desc: description,
-      done: false,
-    };
-    const action = {
+  const handleAddTodo = (newTodo) => {
+    dispatch({
       type: "add",
       payload: newTodo,
-    };
-
-    dispatch(action);
-    reset();
+    });
   };
 
   const handleToggle = (todoId) => {
@@ -76,25 +51,7 @@ export const TodoApp = () => {
           />
         </div>
         <div className="col-5">
-          <h4>Agregar ToDo</h4>
-          <hr />
-          <form onSubmit={handleSubmit}>
-            <input
-              className="form-control"
-              type="text"
-              name="description"
-              placeholder="Aprender..."
-              autoComplete="off"
-              onChange={handleInputChange}
-              value={description}
-            />
-            <button
-              className="btn btn-outline-primary mt-1 form-control"
-              type="submit"
-            >
-              Agregar
-            </button>
-          </form>
+          <TodoAdd handleAddTodo={handleAddTodo} />
         </div>
       </div>
     </div>
