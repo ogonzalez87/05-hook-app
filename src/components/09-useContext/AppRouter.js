@@ -9,6 +9,7 @@ export const AppRouter = () => {
     <Router>
       <div>
         <NavBar />
+        <div className="container">
         <Switch>
           <Route exact path="/" component={HomeScreen} />
           <Route exact path="/login" component={LoginScreen} />
@@ -16,6 +17,9 @@ export const AppRouter = () => {
           {/* <Route component={HomeScreen}/> */}
           <Redirect to="/"/>
         </Switch>
+        </div>
+
+        
       </div>
     </Router>
   );
