@@ -3,7 +3,7 @@ import React from "react";
 import { TodoList } from "../../components/08-useReducer/TodoList";
 import { demoTodos } from "../fixtures/demoTodos";
 import "@testing-library/jest-dom";
-import { TodoListItem } from "../../components/08-useReducer/TodoListItem";
+ 
 
 describe("TodoList", () => {
   const handleDelete = jest.fn();
